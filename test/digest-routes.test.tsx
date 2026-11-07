@@ -41,7 +41,7 @@ describe('digest routes', () => {
   let app: ReturnType<typeof createApp>;
 
   beforeEach(() => {
-    runsDir = mkdtempSync('/tmp/opencode/rig-digest-routes-');
+    runsDir = mkdtempSync(join(process.env.RUNNER_TEMP || '/tmp/opencode', 'rig-digest-routes-'));
     app = createApp({
       adapter: 'shim',
       installed: '2026-10-29T14:06:00+01:00',

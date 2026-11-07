@@ -12,7 +12,7 @@ const validEvent = {
 const tempDirs: string[] = [];
 
 function tempDir(): string {
-  const dir = mkdtempSync('/tmp/opencode/digest-reader-');
+  const dir = mkdtempSync(join(process.env.RUNNER_TEMP || '/tmp/opencode', 'digest-reader-'));
   tempDirs.push(dir);
   return dir;
 }
