@@ -1,6 +1,6 @@
 ---
 plan: morning-digest
-status: ready
+status: done
 owner: rook
 opened: 2026-10-29
 ---
@@ -77,3 +77,39 @@ page again with `LANE_MARKER` unset (the banner reads "no marker set") and uploa
 link. Move this plan to `docs/plans/done/` with its issue list.
 
 Done when: the preview link no longer shows the lane marker.
+
+## Issues
+
+| Plan section | Issue | Work |
+| --- | --- | --- |
+| §1 | https://github.com/rishendor/mega-s01e04-rig/issues/1 | Run-log reader and shared digest types |
+| §2a | https://github.com/rishendor/mega-s01e04-rig/issues/2 | Digest page: GET /digest/:night |
+| §2b | https://github.com/rishendor/mega-s01e04-rig/issues/3 | Digest JSON: GET /api/digest/:night |
+| §2c | https://github.com/rishendor/mega-s01e04-rig/issues/4 | Status board: night links and event counts |
+| §2d | https://github.com/rishendor/mega-s01e04-rig/issues/5 | Digest HTML and JSON route tests |
+| §3 | https://github.com/rishendor/mega-s01e04-rig/issues/6 | Export and publish the digest preview for review |
+| §4 | https://github.com/rishendor/mega-s01e04-rig/issues/7 | After review: remove preview marker and archive the plan |
+
+## Completion — 2026-11-07
+
+- The [course reviewer](https://hq.mega.dev/challenges/before-i-looked) confirmed that the
+  marked preview had been reviewed. Separate human approval was then obtained for
+  marker-free replacement at the existing URL and deletion of that run's temporary artifact.
+  Review and approval records are retained privately; they are not public repository files.
+- [Replacement run 42418194600](https://github.com/rishendor/mega-s01e04-rig/actions/runs/42418194600)
+  succeeded with `with_marker=false` at source commit
+  `dcaaf10f437b0abc3287dd8419cb7f11fa652a38`. Its temporary artifact `13592536445` was
+  deleted; an independent artifact request returned HTTP 404 and the run's artifact list
+  was empty.
+- The [original preview URL](https://rishendor.github.io/mega-s01e04-rig/) returned HTTP 200
+  without redirects and matched a fresh command-exported unmarked page byte for byte:
+  2354 bytes, SHA-256 `4ae0918ebba7109a7ac2fdfcded5153caf1ee92f2cf6653143cdbdbf1c3d53f1`.
+  The banner reads exactly `no marker set`; the supplied marker is absent. The original
+  page differs only in that banner text. Isolated Chrome rendering preserved all five
+  sample jobs, table cells, warning classes, missing values and timestamp offsets.
+- Archive-branch verification passed: `vitest run` (84 tests), `tsc --noEmit`, and
+  `node --test scripts/check-export-preview.mjs` (5 exporter checks). Source run fixtures
+  remain unchanged.
+- The original plan body above is preserved verbatim; only its frontmatter status changed
+  from ready to done. This archive records completed implementation and cleanup, not final
+  course acceptance.
