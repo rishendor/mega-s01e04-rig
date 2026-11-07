@@ -120,6 +120,7 @@ byte verification. Record the real URL from the verified step/environment and
 independently render it; do not infer success from this runbook's expected URL.
 Only then perform the separately verified reviewer handoff; keep #6 OPEN until actual reviewer feedback is received.
 Review is not cleanup approval: `with_marker=false` needs separate human approval after review; any redispatch needs relevant approval.
+See the [completed morning digest plan](plans/done/2026-10-29-morning-digest.md) for the issue list and verified replacement record.
 
 ## Cancellation and failure recovery
 
