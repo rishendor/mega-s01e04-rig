@@ -41,4 +41,7 @@ Validate the exporter against an isolated loopback test server:
 node --test scripts/check-export-preview.mjs
 ```
 
+For the separately approved, manual-only GitHub Pages publication, see
+[the preview deployment runbook](docs/preview.md). Pushing code never deploys it.
+
 Working on it with an agent: start at [AGENTS.md](AGENTS.md).

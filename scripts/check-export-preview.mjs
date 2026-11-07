@@ -13,7 +13,7 @@ const script = fileURLToPath(new URL('./export-preview.mjs', import.meta.url));
 const repo = fileURLToPath(new URL('..', import.meta.url));
 
 test('exports only successful loopback HTML to a new file outside the repo', async (t) => {
-  const dir = await mkdtemp('/tmp/opencode/rig-export-test-');
+  const dir = await mkdtemp(join(process.env.RUNNER_TEMP ?? '/tmp/opencode', 'rig-export-test-'));
   t.after(() => rm(dir, { recursive: true }));
   let status = 200;
   let type = 'text/html; charset=UTF-8';
