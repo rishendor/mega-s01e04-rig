@@ -118,8 +118,8 @@ gh api repos/rishendor/mega-s01e04-rig/actions/runs/RUN_ID/artifacts --jq '{tota
 Require successful generation, deployment, artifact deletion/GET 404 and live
 byte verification. Record the real URL from the verified step/environment and
 independently render it; do not infer success from this runbook's expected URL.
-Only then perform the separately verified reviewer handoff and close #6. Do not
-dispatch again, especially with `with_marker=false`, without the relevant approval.
+Only then perform the separately verified reviewer handoff; keep #6 OPEN until actual reviewer feedback is received.
+Review is not cleanup approval: `with_marker=false` needs separate human approval after review; any redispatch needs relevant approval.
 
 ## Cancellation and failure recovery
 
