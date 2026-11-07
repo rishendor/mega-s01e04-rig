@@ -12,10 +12,10 @@ function event(job: string, status: 'ok' | 'retry' | 'fail', owner: string | nul
   return JSON.stringify({ at, job, status, owner, ...(error === undefined ? {} : { error }) });
 }
 
-// No DOM dependency is needed for the server-rendered table. Decode entities after
-// stripping tags so escaped job names/errors remain text, rather than markup.
+// No DOM dependency is needed. Tag boundaries keep adjacent elements' text apart.
+// Decode last so escaped job names/errors remain text, rather than markup.
 function text(html: string) {
-  return html.replace(/<[^>]*>/g, '').replace(/&(#\d+|#x[\da-f]+|amp|lt|gt|quot|apos);/gi, (entity, name: string) => {
+  return html.replace(/<[^>]*>/g, ' ').replace(/&(#\d+|#x[\da-f]+|amp|lt|gt|quot|apos);/gi, (entity, name: string) => {
     if (name.startsWith('#x')) return String.fromCodePoint(Number.parseInt(name.slice(2), 16));
     if (name.startsWith('#')) return String.fromCodePoint(Number(name.slice(1)));
     return ({ amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" } as Record<string, string>)[name] ?? entity;
@@ -24,11 +24,12 @@ function text(html: string) {
 
 function tableRows(html: string) {
   return [...html.matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)]
+    // Data rows may start with a semantic th; all-th column headings are not data.
+    .filter(([markup]) => /<td\b/i.test(markup))
     .map(([markup]) => ({
       markup,
-      cells: [...markup.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map((cell) => text(cell[1])),
-    }))
-    .filter((row) => row.cells.length > 0);
+      cells: [...markup.matchAll(/<(td|th)\b[^>]*>([\s\S]*?)<\/\1>/gi)].map((cell) => text(cell[2])),
+    }));
 }
 
 function expectBadLines(html: string, count: number) {
