@@ -7,19 +7,19 @@ export type StatusCounts = {
   readonly fail: number;
 };
 
-/** One job's valid events, observed in JSONL file order. */
+/** One job's valid events, ordered by event time; file order breaks ties. */
 export type DigestRow = {
   readonly job: string;
-  /** Owner from the last event, including an explicit null. */
+  /** Owner from the latest event, including an explicit null. */
   readonly owner: string | null;
   /** All valid events for this job, including retries and failures. */
   readonly runs: number;
   /** Events whose status is retry. */
   readonly retries: number;
   readonly lastStatus: RunStatus;
-  /** Latest supplied error string; retained after recovery, null if never supplied. */
+  /** Latest error by event time; retained after recovery, null if never supplied. */
   readonly lastError: string | null;
-  /** Original at strings from the first and last events; offsets are unchanged. */
+  /** Original earliest/latest at strings; offsets are unchanged. */
   readonly firstAt: string;
   readonly lastAt: string;
   /** True if any event failed, even when lastStatus is now ok or retry. */
@@ -30,7 +30,7 @@ export type NightDigest = {
   readonly night: string;
   /** One row per job, ascending by case-sensitive JS string comparison, not locale. */
   readonly rows: readonly DigestRow[];
-  /** Rejected lines do not contribute to rows, runs, retries, or counts. */
+  /** Invalid JSON/events; blank lines are ignored. Rejections contribute no events. */
   readonly badLines: number;
   /** Totals across all valid events in the night, for the status board. */
   readonly counts: StatusCounts;
@@ -41,6 +41,7 @@ export type NightDigest = {
  * night must be a real calendar date in YYYY-MM-DD form; an invalid night or
  * missing file returns null. Empty or wholly malformed files return a digest
  * with no rows and zero counts (and the applicable badLines count), not null.
+ * Blank lines are ignored; unexpected filesystem errors propagate to the caller.
  * Consumers use the reader's row order unchanged for both HTML and JSON.
  */
 export type ReadNight = (runsDir: string, night: string) => NightDigest | null;
